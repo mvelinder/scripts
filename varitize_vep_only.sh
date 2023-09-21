@@ -5,12 +5,12 @@
 VEP=$1
 
 # other variables
-GENCC=~/scripts/resources/gencc-submissions.tsv
-HPO_FILE=~/scripts/resources/HPO_phenotype_to_genes.txt
-UNI_FILE=~/scripts/resources/uniprot_gene_descriptions.tsv
-PATHWAY_FILE=~/scripts/resources/PathwayCommons12.All.hgnc.txt
-PLI_FILE=~/scripts/resources/gnomad.v2.1.1.lof_metrics.by_gene.txt
-TF_FILE=~/scripts/resources/tf-target-infomation.txt
+GENCC=/scratch/ucgd/lustre-work/marth/u0691312/scripts/resources/gencc-submissions-fixed.tsv
+HPO_FILE=/scratch/ucgd/lustre-work/marth/u0691312/scripts/resources/phenotype_to_genes.txt
+UNI_FILE=/scratch/ucgd/lustre-work/marth/u0691312/scripts/resources/uniprot_gene_descriptions.tsv
+PATHWAY_FILE=/scratch/ucgd/lustre-work/marth/u0691312/scripts/resources/PathwayCommons12.All.hgnc.txt
+PLI_FILE=/scratch/ucgd/lustre-work/marth/u0691312/scripts/resources/gnomad.v2.1.1.lof_metrics.by_gene.txt
+TF_FILE=/scratch/ucgd/lustre-work/marth/u0691312/scripts/resources/tf-target-infomation.txt
 VEP_IMPACTFUL=$VEP.impactful.tsv
 GENCC_ALL=$VEP_IMPACTFUL.gencc.all.txt
 GENCC_AD_HET=$VEP_IMPACTFUL.gencc.ad.het.txt
@@ -37,20 +37,20 @@ echo "Prioritizing impactful variants using GENCC..."
 time tail -n+2 $VEP_IMPACTFUL | cut -f 3 | sort -u | while read line; do awk -v line=$line '$3 == line' $GENCC; done > $GENCC_ALL
 
 # get gene:disease associations for impactful het variants with dominant disease moi
-tail -n+2 $VEP_IMPACTFUL | awk '$10 == "HET"' | cut -f 3 | sort -u | while read line; do awk -v line=$line '$3 == line' $GENCC; done | grep -i dominant | cut -f 3,5,11 | sort -u > $GENCC_AD_HET
+tail -n+2 $VEP_IMPACTFUL | awk '$11 == "HET"' | cut -f 3 | sort -u | while read line; do awk -v line=$line '$3 == line' $GENCC; done | grep -i dominant | cut -f 3,5,11 | sort -u > $GENCC_AD_HET
 
 # get variants from above into their own file
-tail -n+2 $VEP_IMPACTFUL | awk '$10 == "HET"' | cut -f 3 | sort -u | while read line; do awk -v line=$line '$3 == line' $GENCC; done | grep -i dominant | cut -f 3 | while read line; do awk -v line=$line '$3 == line' $VEP_IMPACTFUL; done > $GENCC_AD_HET_VAR
+tail -n+2 $VEP_IMPACTFUL | awk '$11 == "HET"' | cut -f 3 | sort -u | while read line; do awk -v line=$line '$3 == line' $GENCC; done | grep -i dominant | cut -f 3 | while read line; do awk -v line=$line '$3 == line' $VEP_IMPACTFUL; done > $GENCC_AD_HET_VAR
 
 # get gene:disease association for impactful hom variants with recessive disease moi
-tail -n+2 $VEP_IMPACTFUL | awk '$10 == "HOM"' | cut -f 3 | sort -u | while read line; do awk -v line=$line '$3 == line' $GENCC; done | grep -i recessive | cut -f 3,5,11 | sort -u > $GENCC_AR_HOM
+tail -n+2 $VEP_IMPACTFUL | awk '$11 == "HOM"' | cut -f 3 | sort -u | while read line; do awk -v line=$line '$3 == line' $GENCC; done | grep -i recessive | cut -f 3,5,11 | sort -u > $GENCC_AR_HOM
 
 # get variants from above into their own file
-tail -n+2 $VEP_IMPACTFUL | awk '$10 == "HOM"' | cut -f 3 | sort -u | while read line; do awk -v line=$line '$3 == line' $GENCC; done | grep -i recessive | cut -f 3 | while read line; do awk -v line=$line '$3 == line' $VEP_IMPACTFUL; done > $GENCC_AR_HOM_VAR
+tail -n+2 $VEP_IMPACTFUL | awk '$11 == "HOM"' | cut -f 3 | sort -u | while read line; do awk -v line=$line '$3 == line' $GENCC; done | grep -i recessive | cut -f 3 | while read line; do awk -v line=$line '$3 == line' $VEP_IMPACTFUL; done > $GENCC_AR_HOM_VAR
 
 # get all gene:HPO associations for impactful variants
 echo "Prioritizing impactful variants using HPO..."
-time tail -n+2 $VEP_IMPACTFUL | cut -f 3 | sort -u | while read line; do awk -v line=$line '$1 == line' $HPO_FILE; done | sort -u > $HPO
+time tail -n+2 $VEP_IMPACTFUL | cut -f 3 | sort -u | while read line; do awk -v line=$line '$4 == line' $HPO_FILE; done | sort -u > $HPO
 
 # get all gene descriptions from UniProt
 echo "Getting gene descriptions from UniProt"
@@ -58,7 +58,7 @@ time tail -n+2 $VEP_IMPACTFUL | cut -f 3 | sort -u | while read line; do grep -w
 
 # get all gene:phenotypes from OMIM for impactful variants
 echo "Prioritizing impactful variants using OMIM..."
-time tail -n+2 $VEP_IMPACTFUL | cut -f 3 | sort -u | while read line; do bash ~/scripts/omim_gene_phenotypes.sh $line; done > $OMIM
+time tail -n+2 $VEP_IMPACTFUL | cut -f 3 | sort -u | while read line; do bash /scratch/ucgd/lustre-work/marth/u0691312/scripts/omim_gene_phenotypes.sh $line; done > $OMIM
 
 # get all gene:pathway information from pathwaycommons
 #echo "Getting gene:pathway information..."

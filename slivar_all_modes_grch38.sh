@@ -4,9 +4,9 @@ set -euxo pipefail
 ## set these variables
 vcf=$1
 ped=$2
-fasta=~/scripts/resources/hg38.fa.gz
-gnomad=~/scripts/resources/gnomad.genomes.v3.1.sites.slivar.zip
-js=~/scripts/resources/slivar-functions.js
+fasta=resources/hg38.fa.gz
+gnomad=resources/gnomad.genomes.v3.1.sites.slivar.zip
+js=resources/slivar-functions.js
 ## end variables
 
 # slivar all modes

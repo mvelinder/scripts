@@ -1,7 +1,7 @@
 vcf=$1
 maf=$2
-js=~/scripts/resources/slivar-functions.js
-gnomad=~/scripts/resources/gnomad.genomes.r2.1.1.sites.slivar.zip
+js=resources/slivar-functions.js
+gnomad=resources/gnomad.genomes.r2.1.1.sites.slivar.zip
 
 slivar expr --vcf $vcf \
     --pass-only \

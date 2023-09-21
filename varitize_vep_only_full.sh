@@ -5,12 +5,12 @@
 VEP=$1
 
 # other variables
-GENCC=~/scripts/resources/gencc-submissions.tsv
-HPO_FILE=~/scripts/resources/HPO_phenotype_to_genes.txt
-UNI_FILE=~/scripts/resources/uniprot_gene_descriptions.tsv
-PATHWAY_FILE=~/scripts/resources/PathwayCommons12.All.hgnc.txt
-PLI_FILE=~/scripts/resources/gnomad.v2.1.1.lof_metrics.by_gene.txt
-TF_FILE=~/scripts/resources/tf-target-infomation.txt
+GENCC=resources/gencc-submissions.tsv
+HPO_FILE=resources/HPO_phenotype_to_genes.txt
+UNI_FILE=resources/uniprot_gene_descriptions.tsv
+PATHWAY_FILE=resources/PathwayCommons12.All.hgnc.txt
+PLI_FILE=resources/gnomad.v2.1.1.lof_metrics.by_gene.txt
+TF_FILE=resources/tf-target-infomation.txt
 VEP_IMPACTFUL=$VEP.impactful.tsv
 GENCC_ALL=$VEP_IMPACTFUL.gencc.all.txt
 GENCC_AD_HET=$VEP_IMPACTFUL.gencc.ad.het.txt
@@ -58,7 +58,7 @@ time tail -n+2 $VEP_IMPACTFUL | cut -f 3 | sort -u | while read line; do grep -w
 
 # get all gene:phenotypes from OMIM for impactful variants
 echo "Prioritizing impactful variants using OMIM..."
-time tail -n+2 $VEP_IMPACTFUL | cut -f 3 | sort -u | while read line; do bash ~/scripts/omim_gene_phenotypes.sh $line; done > $OMIM
+time tail -n+2 $VEP_IMPACTFUL | cut -f 3 | sort -u | while read line; do bash omim_gene_phenotypes.sh $line; done > $OMIM
 
 # get all gene:pathway information from pathwaycommons
 echo "Getting gene:pathway information..."
